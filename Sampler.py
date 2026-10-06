@@ -28,8 +28,8 @@ class Sampler:
              return np.empty((batch_size, 0), dtype=np.float64)
 
         elements_to_use = num_batches * batch_size
-        shuffled_samples = np.random.permutation(n)[:elements_to_use]
-        shuffled_samples = shuffled_samples.reshape(num_batches, batch_size)
+        shuffle = np.random.permutation(n)[:elements_to_use]
+        shuffled_samples = samples[shuffle].reshape(num_batches, batch_size)
         return shuffled_samples
 
     @classmethod
@@ -43,7 +43,7 @@ class Sampler:
         Returns:
             A 1D numpy array containing the mean for each batch.
         """
-        
+
         if not isinstance(batched_samples, np.ndarray) or batched_samples.ndim != 2:
             raise ValueError("Samples must be a 2-dimensional numpy array.")
 
@@ -58,6 +58,7 @@ class NormalSampler(Sampler):
 
     def sample(self, n: int) -> np.ndarray:
         """Generates n samples from N(mean, std_dev^2)."""
+
         return np.random.normal(loc=self.mean, scale=self.std_dev, size=n)
 
 class BinomialSampler(Sampler):
@@ -71,7 +72,7 @@ class BinomialSampler(Sampler):
 
     def sample(self, n: int) -> np.ndarray:
         """Generates n samples from Binomial(trials, probability)."""
-        # np.random.binomial returns integers, cast to ensure return type compliance
+
         return np.random.binomial(n=self.trials, p=self.probability, size=n)
 
 class PoissonSampler(Sampler):
