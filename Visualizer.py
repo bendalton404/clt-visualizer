@@ -22,7 +22,11 @@ class Visualizer:
         self.distribution_name = distribution_name
         self.samples = samples
         self.batched_means = batched_means
-        self.hist_bins = 30
+
+    def calculate_bins(self, samples) -> int:
+        """Calculates the number of bins for a histogram"""
+
+        return 20
 
     def plot(self):
         """
@@ -33,14 +37,14 @@ class Visualizer:
         fig, axes = plt.subplots(1, 2, figsize=(14, 6))
         
         ax_samples = axes[0]
-        ax_samples.hist(self.samples, bins=self.hist_bins, edgecolor='black', alpha=0.7)
+        ax_samples.hist(self.samples, bins='auto', edgecolor='black', alpha=0.7)
         ax_samples.set_title(f'Distribution of Raw Samples ({self.distribution_name})')
         ax_samples.set_xlabel('Sample Value')
         ax_samples.set_ylabel('Frequency')
 
         ax_means = axes[1]
-        ax_means.hist(self.batched_means, bins=self.hist_bins, edgecolor='black', alpha=0.7)
-        ax_means.set_title('Distribution of Batch Means (CLT Effect)')
+        ax_means.hist(self.batched_means, edgecolor='black', alpha=0.7)
+        ax_means.set_title('Distribution of Batch Means')
         ax_means.set_xlabel('Mean Value')
         ax_means.set_ylabel('Frequency')
         ax_means.legend()
